@@ -1,0 +1,30 @@
+library (foreign)
+rm(list=ls())
+x<-data.frame(read.dbf("C:\\Users\\SALA-C22\\Desktop\\SDEMT215.dbf")) #Otra forma de abrir la base de datos
+## rm(list=ls()) Sirve para limpiar todas las bases de datos
+#### RECODIFICAR VARIABLES NUMERICAS 26/02/2016
+#Metodo 1
+x$CLASE2.1[as.numeric(x$CLASE2)>=0 & as.numeric(x$CLASE2)<=2]<-1 #SSe crea una variable llamada clase
+x$CLASE2.1[as.numeric(x$CLASE2)>=3 & as.numeric(x$CLASE2)<=4]<-2
+#Metodo 2
+x$CLASE2.2<-ifelse(as.numeric(x$CLASE2) >= 1 & as.numeric(x$CLASE2)<=2,1,ifelse(as.numeric(x$CLASE2)>=3 & as.numeric(x$CLASE2)<=3,2,3))
+require(questionr)
+wtd.table(x$CLASE2.1)
+wtd.table(x$CLASE2.2)
+
+#Ejercicio
+table(x$EDA)
+#Método 1
+x$EDA1.1[as.numeric(x$EDA)>=1 & as.numeric(x$EDA)<=15]<-1
+x$EDA1.1[as.numeric(x$EDA)>=16 & as.numeric(x$EDA)<=30]<-2
+x$EDA1.1[as.numeric(x$EDA)>=31 & as.numeric(x$EDA)<=60]<-3
+x$EDA1.1[as.numeric(x$EDA)>=61 & as.numeric(x$EDA)<=98]<-4
+x$EDA1.1[as.numeric(x$EDA)>=99 & as.numeric(x$EDA)<=100]<-5
+x$EDA1.2<-ordered(x$EDA1.1,levels=c(1,2,3,4,5),labels=c("niños","jovenes","adultos","adultos mayores","NE"))
+wtd.table(x$EDA1.2)
+
+#Metodo 2
+x$EDA2.2<-ifelse(as.numeric(x$EDA)>=1 & as.numeric(x$EDA)<=15,1,ifelse(as.numeric(x$EDA)>=16 & as.numeric(x$EDA)<=30,2,ifelse(as.numeric(x$EDA)>=31 & as.numeric(x$EDA)<=60,3,ifelse(as.numeric(x$EDA)>=61 & as.numeric(x$EDA)<=98,4,5))))
+x$EDA2.3<-ordered(x$EDA2.2,levels=c(1,2,3,4,5),labels=c("niños","jovenes","adultos","adultos mayores","NE"))
+wtd.table(x$EDA2.3)
+
